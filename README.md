@@ -4,3 +4,4 @@
 fetch test
 fetch test2
 3
+4
