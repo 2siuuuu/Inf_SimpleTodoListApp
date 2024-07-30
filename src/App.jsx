@@ -36,7 +36,7 @@ const mockData = [
 
 function App() {
   //todos에 todoItem들이 하나씩 들어간다.
-  const [todos, setTodos]=useState([mockData])
+  const [todos, setTodos]=useState(mockData)
   
   // todo data의 id를 관리하는 Reference
   const idRef = useRef(3);
@@ -45,7 +45,7 @@ function App() {
   const onCreate = (content)=>{
     const newTodo = {
       // 이제 하나씩 만들 때 마다 id는 증가되어 저장될 것이다.
-      
+
       id: idRef.current++,
       isDone: false,
       content: content,
@@ -61,7 +61,7 @@ function App() {
     <div className='App'>
       <Header/>
       <Editor onCreate={onCreate}/>
-      <List/>
+      <List todos={todos}/>
     </div>
   )
 }
