@@ -1,0 +1,33 @@
+.TodoItem {
+    display : flex;
+    /* 디스플레이 속성이 flex일 때 아이템들의 수직 정렬을 가운데로. */
+    align-items: center;
+    gap:20px;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid rgb(240, 240, 240);
+}
+
+.TodoItem > input {
+    width: 20px;
+}
+
+/* 특정 className을 가진 요소를 지정하는 방법 */
+.TodoItem .content {
+    flex: 1;
+}
+
+.TodoItem .date{
+    font-size: 14px;
+    color: gray;
+}
+
+.TodoItem > button {
+    cursor: pointer;
+    color: gray;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+}

@@ -1,0 +1,16 @@
+.App{
+
+    /* 자식요소들의 폭을 500px로 만든다 */
+    width: 500px;
+    /* 자식요소들의 마진을 자동으로 조절한다. 0인 경우 자동 가운데 정렬. */
+    margin: 0 auto;
+
+    display: flex;
+    
+    /* column은 세로로 row는 가로로 */
+    flex-direction: column; 
+
+    /* gap은 display 속성이 flex일 때만 적용 가능함. */
+    gap: 10px
+
+}
