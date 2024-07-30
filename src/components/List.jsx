@@ -3,7 +3,7 @@ import TodoItem from "./TodoItem";
 
 import { useState } from "react";
 
-const List = ({todos}) => {
+const List = ({todos, onUpdate}) => {
 
     const [search, setSearch] = useState("");
 
@@ -41,7 +41,7 @@ const List = ({todos}) => {
             <div className="todoitem_wrapper">
                 {filteredTodos.map((todo)=>{
                     //컴포넌트를 리스트의 형태로 렌더링 할 때는 각 요소의 구분을 위해 key속성이 필요.
-                    return <TodoItem key={todo.id} {...todo}/>;
+                    return <TodoItem key={todo.id} {...todo} onUpdate={onUpdate}/>;
                 })}
             </div>
         </div>
