@@ -1,8 +1,9 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useReducer } from 'react'
 
 import Header from './components/Header'
 import List from './components/List'
 import Editor from './components/Editor'
+import Exam from './components/Exam'
 
 import "./style/App.css"
 
@@ -34,51 +35,68 @@ const mockData = [
   },
 ]
 
+function reducer(state, action) {
+  switch(action.type) {
+    case "CREATE":
+      return (
+        [action.data, ...state ]
+      );
+    case "UPDATE":
+      return (
+        state.map((item)=>{return (
+          item.id === action.targetID ? {...item,isDone: !item.isDone }: item
+        )})
+      );
+    case "DELETE":
+      return (
+        state.filter((item)=>{return (
+          item.id !== action.targetID
+        )})
+      )
+  }
+}
+
 function App() {
   //todos에 todoItem들이 하나씩 들어간다.
-  const [todos, setTodos]=useState(mockData)
+  const [todos, dispatch] = useReducer(reducer,mockData);
   
   // todo data의 id를 관리하는 Reference
   const idRef = useRef(3);
 
   //새롭게 생성될 todo data
   const onCreate = (content)=>{
-    const newTodo = {
-      // 이제 하나씩 만들 때 마다 id는 증가되어 저장될 것이다.
-
-      id: idRef.current++,
-      isDone: false,
-      content: content,
-      date: new Date().getTime(),      
-    }
-
-    setTodos([newTodo, ...todos])
-  }
+    dispatch({
+      type: "CREATE",
+      data: {
+        // 이제 하나씩 만들 때 마다 id는 증가되어 저장될 것이다.
+        id: idRef.current++,
+        isDone: false,
+        content: content,
+        date: new Date().getTime(),        
+      }
+    })
+  };
 
   const onUpdate = (targetId) => {
-    // todos State의 값들 중에
-    // targetId와 일치하는 id를 갖는 투두 아이템의 isDone 변경
 
-    setTodos(todos.map((todo)=>{
-      if(todo.id === targetId) {
-        // 이 리턴된 객체는 새로운 배열에 저장되고 이 객체가 저장된 배열이 State에 저장된다.
-        return {
-          ...todo,
-          // 토글 시키기.
-          isDone: !todo.isDone
-        }
-      }
-      return todo;
-    }))
+    dispatch({
+      type: "UPDATE",
+      targetID: targetId,
+    })
   }
 
   const onDelete = (targetId) => {
-    setTodos(todos.filter((todo)=>todo.id !== targetId));
+
+    dispatch({
+      type: "DELETE",
+      targetID: targetId,
+    })
 
   }
 
   return (
     <div className='App'>
+      {/* <Exam /> */}
       <Header/>
       <Editor onCreate={onCreate}/>
       <List todos={todos} onUpdate={onUpdate} onDelete={onDelete}/>
