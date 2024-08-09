@@ -1,4 +1,4 @@
-import { useState, useRef, useReducer, useCallback, createContext } from 'react'
+import { useState, useRef, useReducer, useCallback, createContext, useMemo} from 'react'
 
 import Header from './components/Header'
 import List from './components/List'
@@ -58,7 +58,8 @@ function reducer(state, action) {
 }
 
 
-export const TodoContext = createContext();
+export const TodoStateContext = createContext();
+export const TodoDispatchContext = createContext();
 
 
 function App() {
@@ -101,21 +102,31 @@ function App() {
 
   },[]);
 
+  // mount 시에만 리렌더링 되도록 조치
+  const memoizedDispatch = useMemo(()=>{
+    return ({onCreate,
+      onUpdate,
+      onDelete});
+  }
+  ,[])
+
   return (
     <div className='App'>
       {/* <Exam /> */}
       <Header/>
-      <TodoContext.Provider
-      value={{
-        todos,
-        onCreate,
-        onUpdate,
-        onDelete,
-      }}
+      <TodoStateContext.Provider
+      // 객체로 넘기지 않았기 때문에 받는 쪽에서 구조분해할당으로 받지 않는다.
+      value={todos}
       >
-        <Editor />
-        <List />
-      </TodoContext.Provider>
+        <TodoDispatchContext.Provider
+        value={memoizedDispatch}
+        >
+          <Editor />
+          <List />
+        </TodoDispatchContext.Provider>
+      
+      </TodoStateContext.Provider>
+      
       
     </div>
   )
