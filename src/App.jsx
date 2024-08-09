@@ -1,4 +1,4 @@
-import { useState, useRef, useReducer } from 'react'
+import { useState, useRef, useReducer, useCallback, createContext } from 'react'
 
 import Header from './components/Header'
 import List from './components/List'
@@ -7,6 +7,7 @@ import Exam from './components/Exam'
 
 import "./style/App.css"
 
+//temp
 
 // 임시 데이터. 임시=mock (초기 todo값으로 넣는 데이터)
 // 리렌더링될 필요가 없기 때문에 컴포넌트 밖에 선언.
@@ -56,15 +57,21 @@ function reducer(state, action) {
   }
 }
 
+
+export const TodoContext = createContext();
+
+
 function App() {
   //todos에 todoItem들이 하나씩 들어간다.
   const [todos, dispatch] = useReducer(reducer,mockData);
   
+  
   // todo data의 id를 관리하는 Reference
   const idRef = useRef(3);
 
+
   //새롭게 생성될 todo data
-  const onCreate = (content)=>{
+  const onCreate = useCallback((content)=>{
     dispatch({
       type: "CREATE",
       data: {
@@ -75,31 +82,41 @@ function App() {
         date: new Date().getTime(),        
       }
     })
-  };
+  },[]);
 
-  const onUpdate = (targetId) => {
+  const onUpdate = useCallback((targetId) => {
 
     dispatch({
       type: "UPDATE",
       targetID: targetId,
     })
-  }
+  },[]);
 
-  const onDelete = (targetId) => {
+  const onDelete = useCallback((targetId) => {
 
     dispatch({
       type: "DELETE",
       targetID: targetId,
     })
 
-  }
+  },[]);
 
   return (
     <div className='App'>
       {/* <Exam /> */}
       <Header/>
-      <Editor onCreate={onCreate}/>
-      <List todos={todos} onUpdate={onUpdate} onDelete={onDelete}/>
+      <TodoContext.Provider
+      value={{
+        todos,
+        onCreate,
+        onUpdate,
+        onDelete,
+      }}
+      >
+        <Editor />
+        <List />
+      </TodoContext.Provider>
+      
     </div>
   )
 }
