@@ -1,6 +1,6 @@
 import "../style/List.css"
 import TodoItem from "./TodoItem";
-import { TodoContext } from "../App";
+import { TodoStateContext } from "../App";
 
 import { useState,useReducer, useMemo, useContext } from "react";
 
@@ -16,7 +16,7 @@ function reducer(state, action) {
 
 const List = () => {
 
-    const {todos, onUpdate, onDelete} = useContext(TodoContext);
+    const todos = useContext(TodoStateContext);
 
     // const [search, setSearch] = useState("");
     const [search, dispatch] = useReducer(reducer, "");
