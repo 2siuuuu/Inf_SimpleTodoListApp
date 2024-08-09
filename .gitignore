@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 
+Inf_SimpleTodoListApp
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
